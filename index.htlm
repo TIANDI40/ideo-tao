@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apprendre à tracer 道 - Le Tao</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Crimson+Text:wght@400;600&display=swap');
+        
+        body {
+            font-family: 'Crimson Text', serif;
+            background: linear-gradient(135deg, #f4f1e8 0%, #e8dcc0 50%, #d4c5a0 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%);
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.5);
+            border: 2px solid rgba(139, 69, 19, 0.2);
+            position: relative;
+        }
+        
+        .title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .title h1 {
+            color: #4a3c1d;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            color: #8b7355;
+            font-style: italic;
+            font-size: 1.1em;
+        }
+        
+        .instructions {
+            background: rgba(139, 69, 19, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            border: 1px solid rgba(139, 69, 19, 0.2);
+            color: #5d4e37;
+        }
+        
+        .game-modes {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .mode-btn {
+            background: linear-gradient(135deg, #8b7355 0%, #a0926b 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Crimson Text', serif;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .mode-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        .mode-btn.active {
+            background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+            color: #4a3c1d;
+        }
+        
+        .canvas-container {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+        
+        .canvas-section {
+            text-align: center;
+        }
+        
+        .canvas-title {
+            font-size: 1.2em;
+            color: #4a3c1d;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        canvas {
+            border: 3px solid #8b7355;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            cursor: crosshair;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .demo-canvas {
+            border-color: #d4af37 !important;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .control-btn {
+            background: linear-gradient(135deg, #8b7355 0%, #a0926b 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Crimson Text', serif;
+            transition: all 0.3s ease;
+        }
+        
+        .control-btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #a0926b 0%, #8b7355 100%);
+        }
+        
+        .stroke-info {
+            background: rgba(212, 175, 55, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        
+        .stroke-counter {
+            font-size: 1.5em;
+            color: #4a3c1d;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .stroke-description {
+            color: #5d4e37;
+            font-style: italic;
+        }
+        
+        .success-message {
+            background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+            color: #4a3c1d;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .yin-yang {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            opacity: 0.3;
+            animation: rotate 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .canvas-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            canvas {
+                width: 280px;
+                height: 280px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="yin-yang">☯</div>
+        
+        <div class="title">
+            <h1>L'Art du Tracé</h1>
+            <div class="subtitle">Apprenez à écrire l'idéogramme 道 du Tao</div>
+        </div>
+        
+        <div class="instructions">
+            Choisissez votre mode d'apprentissage et suivez le rythme de votre souffle
+        </div>
+        
+        <div class="game-modes">
+            <button class="mode-btn active" onclick="setMode('demo')">Démonstration</button>
+            <button class="mode-btn" onclick="setMode('practice')">Pratique libre</button>
+            <button class="mode-btn" onclick="setMode('guided')">Tracé guidé</button>
+        </div>
+        
+        <div class="canvas-container">
+            <div class="canvas-section" id="demoSection">
+                <div class="canvas-title">Modèle à suivre</div>
+                <canvas id="demoCanvas" class="demo-canvas" width="300" height="300"></canvas>
+            </div>
+            
+            <div class="canvas-section" id="practiceSection">
+                <div class="canvas-title">Votre tracé</div>
+                <canvas id="practiceCanvas" width="300" height="300"></canvas>
+            </div>
+        </div>
+        
+        <div class="stroke-info" id="strokeInfo">
+            <div class="stroke-counter" id="strokeCounter">Trait 1 / 12</div>
+            <div class="stroke-description" id="strokeDescription">Commencez par le premier trait de 辶 (mouvement)</div>
+        </div>
+        
+        <div class="controls">
+            <button class="control-btn" onclick="startDemo()">▶ Démarrer</button>
+            <button class="control-btn" onclick="pauseDemo()">⏸ Pause</button>
+            <button class="control-btn" onclick="clearCanvas()">🧹 Effacer</button>
+            <button class="control-btn" onclick="slowDown()">🐌 Plus lent</button>
+            <button class="control-btn" onclick="speedUp()">🐰 Plus rapide</button>
+        </div>
+        
+        <div class="success-message" id="successMessage">
+            🌟 Magnifique ! Vous maîtrisez l'art du tracé. 🌟<br>
+            <em>Comme dans le Taijiquan, la beauté naît de la répétition consciente.</em>
+        </div>
+    </div>
+
+    <script>
+        let currentMode = 'demo';
+        let isDrawing = false;
+        let currentStroke = 0;
+        let animationSpeed = 1000;
+        let animationId;
+        let isPaused = false;
+        
+        // Coordonnées des traits pour l'idéogramme 道
+        const strokes = [
+            // 辶 (clé du mouvement)
+            {points: [{x: 50, y: 200}, {x: 100, y: 150}], description: "Premier trait de 辶 - montée"},
+            {points: [{x: 80, y: 180}, {x: 130, y: 130}], description: "Deuxième trait de 辶 - liaison"},
+            {points: [{x: 40, y: 220}, {x: 150, y: 220}, {x: 180, y: 200}], description: "Base de 辶 - ancrage au sol"},
+            
+            // 首 (tête/conscience) - partie droite
+            {points: [{x: 200, y: 80}, {x: 280, y: 80}], description: "Trait horizontal du haut de 首"},
+            {points: [{x: 200, y: 100}, {x: 280, y: 100}], description: "Deuxième horizontal de 首"},
+            {points: [{x: 240, y: 60}, {x: 240, y: 120}], description: "Trait vertical central de 首"},
+            {points: [{x: 200, y: 140}, {x: 280, y: 140}], description: "Troisième horizontal de 首"},
+            {points: [{x: 220, y: 120}, {x: 220, y: 160}], description: "Trait vertical gauche"},
+            {points: [{x: 260, y: 120}, {x: 260, y: 160}], description: "Trait vertical droit"},
+            {points: [{x: 200, y: 180}, {x: 280, y: 180}], description: "Base horizontale de 首"},
+            {points: [{x: 200, y: 200}, {x: 240, y: 200}], description: "Pied gauche de 首"},
+            {points: [{x: 240, y: 200}, {x: 280, y: 200}], description: "Pied droit de 首"}
+        ];
+        
+        const demoCanvas = document.getElementById('demoCanvas');
+        const practiceCanvas = document.getElementById('practiceCanvas');
+        const demoCtx = demoCanvas.getContext('2d');
+        const practiceCtx = practiceCanvas.getContext('2d');
+        
+        // Style de pinceau
+        function setupCanvas(ctx) {
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.strokeStyle = '#4a3c1d';
+            ctx.lineWidth = 4;
+        }
+        
+        setupCanvas(demoCtx);
+        setupCanvas(practiceCtx);
+        
+        // Modes de jeu
+        function setMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (mode === 'demo') {
+                document.getElementById('demoSection').style.display = 'block';
+                document.getElementById('practiceSection').style.display = 'block';
+            } else if (mode === 'practice') {
+                document.getElementById('demoSection').style.display = 'none';
+                document.getElementById('practiceSection').style.display = 'block';
+                setupPracticeMode();
+            } else if (mode === 'guided') {
+                document.getElementById('demoSection').style.display = 'block';
+                document.getElementById('practiceSection').style.display = 'block';
+                setupGuidedMode();
+            }
+            
+            clearCanvas();
+        }
+        
+        // Animation de démonstration
+        function startDemo() {
+            if (isPaused) {
+                isPaused = false;
+                return;
+            }
+            
+            clearCanvas();
+            currentStroke = 0;
+            animateNextStroke();
+        }
+        
+        function animateNextStroke() {
+            if (currentStroke >= strokes.length) {
+                showSuccessMessage();
+                return;
+            }
+            
+            const stroke = strokes[currentStroke];
+            updateStrokeInfo(currentStroke + 1, stroke.description);
+            
+            animateStroke(demoCtx, stroke.points, () => {
+                currentStroke++;
+                if (!isPaused) {
+                    setTimeout(animateNextStroke, animationSpeed / 2);
+                }
+            });
+        }
+        
+        function animateStroke(ctx, points, callback) {
+            if (points.length < 2) return;
+            
+            let pointIndex = 0;
+            const totalPoints = 20; // Points d'interpolation pour animation fluide
+            
+            function drawSegment() {
+                if (isPaused) return;
+                
+                if (pointIndex < totalPoints) {
+                    const progress = pointIndex / (totalPoints - 1);
+                    const currentPoint = interpolatePoints(points, progress);
+                    
+                    if (pointIndex === 0) {
+                        ctx.beginPath();
+                        ctx.moveTo(currentPoint.x, currentPoint.y);
+                    } else {
+                        ctx.lineTo(currentPoint.x, currentPoint.y);
+                        ctx.stroke();
+                    }
+                    
+                    pointIndex++;
+                    setTimeout(drawSegment, animationSpeed / totalPoints);
+                } else {
+                    callback();
+                }
+            }
+            
+            drawSegment();
+        }
+        
+        function interpolatePoints(points, progress) {
+            if (points.length === 2) {
+                const [start, end] = points;
+                return {
+                    x: start.x + (end.x - start.x) * progress,
+                    y: start.y + (end.y - start.y) * progress
+                };
+            } else {
+                // Pour les courbes avec plus de points
+                const totalSegments = points.length - 1;
+                const segmentProgress = progress * totalSegments;
+                const segmentIndex = Math.floor(segmentProgress);
+                const localProgress = segmentProgress - segmentIndex;
+                
+                if (segmentIndex >= totalSegments) {
+                    return points[points.length - 1];
+                }
+                
+                const start = points[segmentIndex];
+                const end = points[segmentIndex + 1];
+                
+                return {
+                    x: start.x + (end.x - start.x) * localProgress,
+                    y: start.y + (end.y - start.y) * localProgress
+                };
+            }
+        }
+        
+        // Mode pratique libre
+        function setupPracticeMode() {
+            practiceCanvas.addEventListener('mousedown', startDrawing);
+            practiceCanvas.addEventListener('mousemove', draw);
+            practiceCanvas.addEventListener('mouseup', stopDrawing);
+            practiceCanvas.addEventListener('mouseout', stopDrawing);
+            
+            // Touch events
+            practiceCanvas.addEventListener('touchstart', handleTouch);
+            practiceCanvas.addEventListener('touchmove', handleTouch);
+            practiceCanvas.addEventListener('touchend', stopDrawing);
+        }
+        
+        function startDrawing(e) {
+            isDrawing = true;
+            const pos = getMousePos(practiceCanvas, e);
+            practiceCtx.beginPath();
+            practiceCtx.moveTo(pos.x, pos.y);
+        }
+        
+        function draw(e) {
+            if (!isDrawing) return;
+            const pos = getMousePos(practiceCanvas, e);
+            practiceCtx.lineTo(pos.x, pos.y);
+            practiceCtx.stroke();
+        }
+        
+        function stopDrawing() {
+            isDrawing = false;
+        }
+        
+        function handleTouch(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent(e.type === 'touchstart' ? 'mousedown' : 
+                                            e.type === 'touchmove' ? 'mousemove' : 'mouseup', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            practiceCanvas.dispatchEvent(mouseEvent);
+        }
+        
+        function getMousePos(canvas, e) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: e.clientX - rect.left,
+                y: e.clientY - rect.top
+            };
+        }
+        
+        // Mode guidé
+        function setupGuidedMode() {
+            // Affiche des guides sur le canvas de pratique
+            drawGuides();
+        }
+        
+        function drawGuides() {
+            practiceCtx.save();
+            practiceCtx.strokeStyle = 'rgba(212, 175, 55, 0.3)';
+            practiceCtx.lineWidth = 2;
+            practiceCtx.setLineDash([5, 5]);
+            
+            // Dessine les guides pour les traits
+            strokes.forEach(stroke => {
+                practiceCtx.beginPath();
+                practiceCtx.moveTo(stroke.points[0].x, stroke.points[0].y);
+                for (let i = 1; i < stroke.points.length; i++) {
+                    practiceCtx.lineTo(stroke.points[i].x, stroke.points[i].y);
+                }
+                practiceCtx.stroke();
+            });
+            
+            practiceCtx.restore();
+        }
+        
+        // Contrôles
+        function pauseDemo() {
+            isPaused = !isPaused;
+        }
+        
+        function clearCanvas() {
+            demoCtx.clearRect(0, 0, demoCanvas.width, demoCanvas.height);
+            practiceCtx.clearRect(0, 0, practiceCanvas.width, practiceCanvas.height);
+            
+            if (currentMode === 'guided') {
+                drawGuides();
+            }
+            
+            document.getElementById('successMessage').style.display = 'none';
+        }
+        
+        function slowDown() {
+            animationSpeed = Math.min(animationSpeed * 1.5, 3000);
+        }
+        
+        function speedUp() {
+            animationSpeed = Math.max(animationSpeed / 1.5, 200);
+        }
+        
+        function updateStrokeInfo(strokeNum, description) {
+            document.getElementById('strokeCounter').textContent = `Trait ${strokeNum} / ${strokes.length}`;
+            document.getElementById('strokeDescription').textContent = description;
+        }
+        
+        function showSuccessMessage() {
+            document.getElementById('successMessage').style.display = 'block';
+        }
+        
+        // Initialisation
+        updateStrokeInfo(1, strokes[0].description);
+    </script>
+</body>
+</html>
